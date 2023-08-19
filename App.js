@@ -1,20 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './screens/HomeScreen';
+import LoggedInScreen from './screens/LoggedInScreen';
+import AddProductScreen from './screens/AddProductScreen'; // Importa la nueva pantalla
 
-export default function App() {
+const Stack = createStackNavigator();
+
+const App = () => {
+  const [loggedIn, setLoggedIn] = useState(false); // Agrega el estado de autenticación
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        {/* Pantalla de Inicio */}
+        <Stack.Screen name="Home">
+          {props => <HomeScreen {...props} setLoggedIn={setLoggedIn} loggedIn={loggedIn} />}
+        </Stack.Screen>
+        
+        {/* Pantalla para usuarios autenticados */}
+        {loggedIn && (
+          <Stack.Screen name="LoggedInScreen" component={LoggedInScreen} />
+        )}
+        {/* Agrega más pantallas aquí si es necesario */}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
